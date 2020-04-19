@@ -1,39 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-  const Note = ({navigation}) => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.pageTitle}>Incluaa sua nova nota</Text>
+const Note = ({navigation}) => {
 
-      <TextInput style={styles.input} placeholder='Título' />
+const [title, setTitle] = useState();
+const [description, setDescription] = useState();
+const [photo, setPhoto] = useState();
 
-      <TextInput 
-        style={styles.input} 
-        placeholder='Descrição'
-        multiline = {true}
-        numberOfLines ={4} />
+const onSave = ()=>{
+/**
+ * Validar Dados
+ * Salvar no DB
+ */
+};
 
+return (
+<View style={styles.container}>
+  <Text style={styles.pageTitle}>Inclua sua nova nota</Text>
 
-      <TouchableOpacity style={styles.cameraButton}>
-        <Icon name='photo-camera' size={18} color='#fff' />
-      </TouchableOpacity>
+  <TextInput 
+    style={styles.input} 
+    placeholder='Título'
+    value={title}
+    onChangeText={(text)=>{
+      setTitle(text)
+    }} />
 
-      <TouchableOpacity style={styles.saveButton}>
-        <Text style={styles.saveButtonText}>Cadastrar</Text>
-      </TouchableOpacity>
+  <TextInput 
+    style={styles.input} 
+    placeholder='Descrição'
+    multiline = {true}
+    numberOfLines ={4} />
 
-      <TouchableOpacity style={styles.cancelButton}
-        onPress={()=>{
-          navigation.goBack();
-        }}
-        >
-        <Text style={styles.cancelButtonText}>Cancelar</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  <TouchableOpacity style={styles.cameraButton}>
+    <Icon name='photo-camera' size={18} color='#fff' />
+  </TouchableOpacity>
+
+  <TouchableOpacity 
+    style={styles.saveButton}
+    onPress={onSave}>
+    <Text style={styles.saveButtonText}>Cadastrar</Text>
+  </TouchableOpacity>
+
+  <TouchableOpacity style={styles.cancelButton}
+    onPress={()=>{
+      navigation.goBack();
+    }}>
+    <Text style={styles.cancelButtonText}>Cancelar</Text>
+  </TouchableOpacity>
+</View>
+);
 };
 
 const styles = StyleSheet.create({
