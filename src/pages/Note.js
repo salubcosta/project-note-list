@@ -5,53 +5,64 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 
 const Note = ({navigation}) => {
 
-const [title, setTitle] = useState();
-const [description, setDescription] = useState();
-const [photo, setPhoto] = useState();
+  const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
+  const [photo, setPhoto] = useState();
 
-const onSave = ()=>{
-/**
- * Validar Dados
- * Salvar no DB
- */
-};
+  const isValid = () => {
+    if((title !== undefined) && (title.trim() !== '')){
+      return true;
+    }
+    return false;
+  }
+    /**
+   * Validar Dados
+   * Salvar no DB
+   */
+  const onSave = ()=>{
+    if(isValid()){
+      console.log(`Título: ${title}\nDescription: ${description}`);
+    }else{
+      console.log('preencha os campos');
+    }
+  };
 
-return (
-<View style={styles.container}>
-  <Text style={styles.pageTitle}>Inclua sua nova nota</Text>
+  return (
+  <View style={styles.container}>
+    <Text style={styles.pageTitle}>Inclua sua nova nota</Text>
 
-  <TextInput 
-    style={styles.input} 
-    placeholder='Título'
-    value={title}
-    onChangeText={(text)=>{
-      setTitle(text)
-    }} />
+    <TextInput 
+      style={styles.input} 
+      placeholder='Título'
+      value={title}
+      onChangeText={(text)=>{
+        setTitle(text)
+      }} />
 
-  <TextInput 
-    style={styles.input} 
-    placeholder='Descrição'
-    multiline = {true}
-    numberOfLines ={4} />
+    <TextInput 
+      style={styles.input} 
+      placeholder='Descrição'
+      multiline = {true}
+      numberOfLines ={4} />
 
-  <TouchableOpacity style={styles.cameraButton}>
-    <Icon name='photo-camera' size={18} color='#fff' />
-  </TouchableOpacity>
+    <TouchableOpacity style={styles.cameraButton}>
+      <Icon name='photo-camera' size={18} color='#fff' />
+    </TouchableOpacity>
 
-  <TouchableOpacity 
-    style={styles.saveButton}
-    onPress={onSave}>
-    <Text style={styles.saveButtonText}>Cadastrar</Text>
-  </TouchableOpacity>
+    <TouchableOpacity 
+      style={[styles.saveButton, (!isValid()) ? styles.saveButtonInvalid : '']}
+      onPress={onSave}>
+      <Text style={styles.saveButtonText}>Cadastrar</Text>
+    </TouchableOpacity>
 
-  <TouchableOpacity style={styles.cancelButton}
-    onPress={()=>{
-      navigation.goBack();
-    }}>
-    <Text style={styles.cancelButtonText}>Cancelar</Text>
-  </TouchableOpacity>
-</View>
-);
+    <TouchableOpacity style={styles.cancelButton}
+      onPress={()=>{
+        navigation.goBack();
+      }}>
+      <Text style={styles.cancelButtonText}>Cancelar</Text>
+    </TouchableOpacity>
+  </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -87,6 +98,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 20
   },
+  saveButtonInvalid:{
+    opacity: 0.5
+  },
   saveButtonText:{
     color: '#fff',
     fontSize: 16
@@ -100,3 +114,4 @@ const styles = StyleSheet.create({
 });
 
 export default Note;
+
