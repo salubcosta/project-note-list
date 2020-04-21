@@ -1,27 +1,43 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, AsyncStorage } from 'react-native';
 
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 const Note = ({navigation}) => {
 
+  const [nota, setNota] = useState([]);
+
   const [title, setTitle] = useState();
   const [description, setDescription] = useState();
   const [photo, setPhoto] = useState();
 
+  useEffect(()=>{
+    AsyncStorage.getItem('Nota').then(data =>{
+      const nt = JSON.parse(data);
+      setNota(nt);
+    });
+    
+  }, []);
+
+
   const isValid = () => {
-    if((title !== undefined) && (title.trim() !== '')){
+    if((title !== undefined) && (title.toString().trim() !== '')){
       return true;
     }
     return false;
   }
-    /**
-   * Validar Dados
-   * Salvar no DB
-   */
-  const onSave = ()=>{
+  
+  const onSave = async ()=>{
     if(isValid()){
-      console.log(`Título: ${title}\nDescription: ${description}`);
+      const id = Math.random(5000).toString();
+      const data = {
+        id,
+        title,
+        description,
+        photo
+      }
+      nota.push(data);
+      await AsyncStorage.setItem('Nota', JSON.stringify(nota));
     }else{
       console.log('preencha os campos');
     }
@@ -43,7 +59,9 @@ const Note = ({navigation}) => {
       style={styles.input} 
       placeholder='Descrição'
       multiline = {true}
-      numberOfLines ={4} />
+      numberOfLines ={4} 
+      onChangeText={text=>setDescription(text)}
+      />
 
     <TouchableOpacity style={styles.cameraButton}>
       <Icon name='photo-camera' size={18} color='#fff' />
@@ -114,4 +132,3 @@ const styles = StyleSheet.create({
 });
 
 export default Note;
-
