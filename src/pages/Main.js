@@ -1,33 +1,18 @@
-import React from "react";
-import {View, Text, TouchableOpacity, FlatList, StyleSheet} from "react-native";
-
+import React, {useState, useEffect} from "react";
+import {View, Text, TouchableOpacity, FlatList, StyleSheet, AsyncStorage} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 const Main = ({navigation}) => {
 
-  const data = [
-    {
-      id: '1',
-      title: 'React Native',
-      annotations: 'Curso de RN excelente',
-      read: false,
-      photo: null,
-    },
-    {
-      id: '2',
-      title: 'A Bíblia do PHP',
-      annotations: 'Material de entrada no mundo da programação',
-      read: false,
-      photo: null,
-    },
-    {
-      id: '3',
-      title: 'Symfony com Doctrine',
-      annotations: 'Será melhor que laravel?',
-      read: false,
-      photo: null,
-    },
-    ];
+  const [nota, setNota] = useState([]);
+
+  useEffect(()=>{
+    // Função executada quando a tela é renderizada
+    //getItem trabalha com Promise, então deve-se utilzar o then
+    AsyncStorage.getItem('Nota').then(data =>{
+      setNota(JSON.parse(data));
+    });
+  }, []);
 
   return(
     <View style={styles.container}>
@@ -42,14 +27,13 @@ const Main = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <FlatList 
-      data={data} 
+      data={nota} 
       renderItem={({item}) => (
         <TouchableOpacity style={styles.itemButton}>
           <Text style={styles.itemText}>{item.title}</Text>
         </TouchableOpacity>
       )} 
       keyExtractor={item => item.id} /> 
-      
     </View>
   );
 }
@@ -82,9 +66,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
-
   },
 });
-
 
 export default Main;
